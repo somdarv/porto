@@ -65,7 +65,7 @@ export default function Registration() {
         if (response.status === 200 || response.status === 201) {
           alert('Registration successful');
           if (router) {
-            router.push('/login');
+            router.push('/registersuccess');
           }
         } else {
           // Handle unexpected status codes
