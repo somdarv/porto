@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
@@ -8,9 +8,21 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaSpinner } from 'react-icons/fa';
 import Link from 'next/link';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
 
 
 export default function Registration() {
+  const router = useRouter(); // useRouter should be called here, at the top level
+
+  // const [router, setRouter] = useState(null);
+
+  // const router = useRouter();
+  // useEffect(() => {
+  //   setRouter(useRouter());
+  // }, []);
+
 
   // Initializing Formik
   const formik = useFormik({
@@ -40,12 +52,38 @@ export default function Registration() {
         .required('Please confirm your password'),
     }),
 
-    onSubmit: values => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        formik.setSubmitting(false); // Stop submitting state after submission
-      }, 1000);
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        // Send a POST request to the backend API
+        const response = await axios.post('http://localhost:5000/api/auth/register', {
+          userName: values.userName,
+          email: values.email,
+          password: values.password
+        });
+
+        // Handle success (redirect to login or another page)
+        if (response.status === 200 || response.status === 201) {
+          alert('Registration successful');
+          if (router) {
+            router.push('/login');
+          }
+        } else {
+          // Handle unexpected status codes
+          alert('Unexpected response status: ' + response.status);
+        }
+      } catch (error) {
+        console.log('Error details:', error);
+        // Handle error (e.g., display an error message)
+        if (error.response && error.response.data.msg) {
+          setFieldError('email', error.response.data.msg);
+        } else {
+          alert('Something went wrong. Please try again later.');
+        }
+      } finally {
+        setSubmitting(false); // Stop submitting state after submission
+      }
     }
+
   });
   return (
     <div className='min-h-screen w-full'>
