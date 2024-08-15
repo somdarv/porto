@@ -70,7 +70,7 @@ export default function Registration() {
 
             <div className='my-8 w-[28%] mx-auto'>
               <form onSubmit={formik.handleSubmit}>
-                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.userName && formik.errors.userName ? 'border-red-400': ''}`}>
+                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.userName && formik.errors.userName ? 'border-red-400' : ''}`}>
                   <input
                     id='userName'
                     type="text"
@@ -86,7 +86,7 @@ export default function Registration() {
                   <div className="text-red-500 text-sm">{formik.errors.userName}</div>
                 ) : null}
 
-                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.email && formik.errors.email ? 'border-red-400': ''}`}>
+                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.email && formik.errors.email ? 'border-red-400' : ''}`}>
                   <input
                     type="email"
                     name="email"
@@ -101,7 +101,7 @@ export default function Registration() {
                   <div className="text-red-500 text-sm">{formik.errors.email}</div>
                 ) : null}
 
-                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.password && formik.errors.password ? 'border-red-400': ''}`}>
+                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.password && formik.errors.password ? 'border-red-400' : ''}`}>
                   <input
                     type="password"
                     name="password"
@@ -116,7 +116,7 @@ export default function Registration() {
                   <div className="text-red-500 text-sm">{formik.errors.password}</div>
                 ) : null}
 
-                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'border-red-400': ''}`}>
+                <div className={`border-b-2 my-2 focus-within:border-[#0085D2] ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'border-red-400' : ''}`}>
                   <input
                     type="password"
                     name="confirmPassword"
@@ -132,12 +132,12 @@ export default function Registration() {
                 ) : null}
 
                 <div className='flex justify-center'>
-                <button 
+                  <button
                     type="submit"
                     disabled={formik.isSubmitting || !formik.isValid}
                     className={`bg-white my-4 flex text-center text-sm font-semibold  px-12 py-3 rounded-full border-2
-                    ${ !formik.isValid ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-white '}
-                    ${formik.isSubmitting ? 'bg-[#0085D2] text-white' :'' }`}
+                    ${!formik.isValid ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-white '}
+                    ${formik.isSubmitting ? 'submitBgColor text-white' : ''}`}
                   >
                     {formik.isSubmitting ? <FaSpinner className="animate-spin" /> : 'Submit'}
                   </button>
