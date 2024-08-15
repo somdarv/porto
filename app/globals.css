@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Behind-The-Nineties';
+  src: url('/fonts/Behind-The-Nineties-Rg.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* You can include other font weights if needed */
+@font-face {
+  font-family: 'Behind-The-Nineties';
+  src: url('/fonts/Behind-The-Nineties-Bd.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+
+
+
+.landbg {
+  background-image: url('/bg.svg');
+  object-fit: contain;
+
+}
+
+.regImage {
+  background-image: url('/reg.png');
+  object-fit: cover;
+  
+}
