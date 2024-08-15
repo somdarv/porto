@@ -137,7 +137,7 @@ export default function Registration() {
                     disabled={formik.isSubmitting || !formik.isValid}
                     className={`bg-white my-4 flex text-center text-sm font-semibold  px-12 py-3 rounded-full border-2
                     ${!formik.isValid ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-white '}
-                    ${formik.isSubmitting ? 'submitBgColor text-white' : ''}`}
+                    ${formik.isSubmitting ? 'submitBgColor bg-[#0085D2]  text-white' : ''}`}
                   >
                     {formik.isSubmitting ? <FaSpinner className="animate-spin" /> : 'Submit'}
                   </button>
