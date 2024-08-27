@@ -20,7 +20,7 @@ export default function page() {
         </h1>
 
         <p className="text-white text-xl text-center my-2 w-[50%] mx-auto">
-           Setting up your own portfolio website is a fantastic way to express
+          Setting up your own portfolio website is a fantastic way to express
           who you are as a creative, and to share your talents with the world.
         </p>
         <div className="flex justify-center">

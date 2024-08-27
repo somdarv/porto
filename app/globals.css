@@ -26,6 +26,24 @@
 
 }
 
+.whitebg {
+  position: relative;
+  z-index: 1; /* Ensure this is above the pseudo-element */
+}
+
+.whitebg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/whitegrid.jpg');
+  background-size: cover; /* Adjust the background size */
+  opacity: 0.1; /* Set the opacity of the background image */
+  z-index: -1; /* Make sure this is below the main content */
+}
+
 .regImage {
   background-image: url('/reg.png');
   object-fit: cover;

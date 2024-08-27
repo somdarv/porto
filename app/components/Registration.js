@@ -63,7 +63,7 @@ export default function Registration() {
 
         // Handle success (redirect to login or another page)
         if (response.status === 200 || response.status === 201) {
-          alert('Registration successful');
+          // alert('Registration successful');
           if (router) {
             router.push('/registersuccess');
           }
