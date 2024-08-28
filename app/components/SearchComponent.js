@@ -3,7 +3,6 @@ import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { IoClose } from "react-icons/io5";
 
-
 export default function SearchComponent() {
     const [searchResults, setSearchResults] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
@@ -31,17 +30,14 @@ export default function SearchComponent() {
 
     const handleSelect = (result) => {
         setSearchTerm(result.name);
-        setDisplaySelected(!displaySelected) // Set the selected result
+        setDisplaySelected(!displaySelected); // Set the selected result
         setSearchResults([]); // Clear the search results after selection
     };
 
     return (
         <div className='w-full flex items-center'>
             <div className='w-full'>
-
-
                 <div className='flex items-center justify-between'>
-
                     {
                         displaySelected === false ? (
                             <div className='w-full'>
@@ -53,9 +49,7 @@ export default function SearchComponent() {
                                             name='search'
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            onBlur={(e) => {
-                                                setIsFocused(false);
-                                            }}
+                                            onBlur={() => setIsFocused(false)}
                                             onFocus={() => setIsFocused(true)}
                                             type="text"
                                             placeholder='Search Item'
@@ -64,26 +58,22 @@ export default function SearchComponent() {
                                     </div>
                                 </form>
                             </div>
-                        ) :
-                            (<div className='w-full'>
+                        ) : (
+                            <div className='w-full'>
                                 {searchResults.length > 0 && (
                                     <ul className='mt-2 w-[80%] bg-white'>
                                         {searchResults.map((result) => (
-
                                             <div
                                                 key={result._id}
                                                 className='flex justify-between items-center gap-x-3'
                                             >
-
                                                 <div className='w-[80%] flex items-center  gap-x-3'>
                                                     <div className='w-3 h-3 rounded-full bg-primary'></div>
                                                     <h1 className='font-semibold'> {result.name}  </h1>
                                                 </div>
-
                                                 <div className='cursor-pointer w-[18%] flex justify-end'>
                                                     <IoClose onClick={() => { setDisplaySelected(!displaySelected); setSearchResults([]); setSearchTerm('') }} className='font-semibold hover:text-primary' />
                                                 </div>
-
                                             </div>
                                         ))}
                                     </ul>
@@ -93,7 +83,8 @@ export default function SearchComponent() {
                                         Continue
                                     </button>
                                 </div>
-                            </div>)
+                            </div>
+                        )
                     }
                 </div>
 
