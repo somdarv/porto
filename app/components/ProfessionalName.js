@@ -52,9 +52,9 @@ export default function SearchComponent({ step, setStep }) {
                                     <div className={`rounded-md flex items-center ${isFocused ? 'border-primary border-2' : 'border-gray-400  border'} py-2 px-2 w-[80%]`}>
                                         <CiSearch className={`text-xl mr-3 ${isFocused ? 'text-primary' : 'text-gray-400'}`} />
                                         <input
-                                            id='search'
-                                            name='search'
-                                            value={searchTerm}
+                                            id='professionalName'
+                                            name='professionalName'
+                                            value={proffesionalName}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             onBlur={() => setIsFocused(false)}
                                             onFocus={() => setIsFocused(true)}
