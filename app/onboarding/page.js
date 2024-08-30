@@ -18,11 +18,11 @@ export default function Page() {
     };
 
     const handleSubmit = async (professionalNameValue) => {
-        console.log('Professional Name:', professionalNameValue); // Log the professional name
-        console.log('Portfolio Type:', portfolioType); // Log the portfolio type
+        console.log('Professional Name:', professionalNameValue);
+        console.log('Portfolio Type:', portfolioType);
 
-        if (!professionalNameValue) {
-            console.error('Professional Name is missing');
+        if (!professionalNameValue || !portfolioType) {
+            console.error('Missing required fields');
             return;
         }
 
@@ -30,6 +30,10 @@ export default function Page() {
             const response = await axios.put('http://localhost:5000/api/users/onboard', {
                 portfolioTypeId: portfolioType._id,
                 professionalName: professionalNameValue,
+            }, {
+                headers: {
+                    'x-auth-token': localStorage.getItem('authToken')
+                }
             });
 
             if (response.status === 200) {
@@ -40,6 +44,10 @@ export default function Page() {
             console.error('Error during onboarding:', error);
         }
     };
+
+
+
+
     return (
         <div className="whitebg h-screen flex flex-col justify-between">
             <div className='w-[80%] py-4 mx-auto'>
