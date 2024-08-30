@@ -31,21 +31,27 @@ export default function Login() {
         }),
 
         onSubmit: async (values, { setSubmitting, setFieldError }) => {
+            console.log('Submitting form...', values); // Added log
             try {
                 const response = await axios.post('http://localhost:5000/api/auth/login', {
                     email: values.email,
                     password: values.password,
                 });
 
+                console.log('Login response:', response.data); // Added log
+
                 // The response contains the `token` and `needsOnboarding` flag
                 localStorage.setItem('authToken', response.data.token);
+                console.log('Login successful! Token:', response.data.token); // Fixed token variable reference
 
                 if (response.data.needsOnboarding) {
                     router.push('/onboarding');
                 } else {
-                    router.push('/dashboard');
+                    // router.push('/dashboard');
+                    console.log('Login successful! Token:', response.data.token); // Fixed token variable reference
                 }
             } catch (error) {
+                console.error('Error during login:', error); // Added log
                 if (error.response && error.response.data.msg) {
                     setFieldError('user', error.response.data.msg);
                 } else {
