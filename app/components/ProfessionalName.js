@@ -1,109 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { CiSearch } from "react-icons/ci";
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
-import { IoClose } from "react-icons/io5";
 
-export default function SearchComponent({ step, setStep }) {
-    const [searchResults, setSearchResults] = useState([]);
-    const [isFocused, setIsFocused] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedResult, setSelectedResult] = useState(null);
 
-    useEffect(() => {
-        if (searchTerm.length > 0) {
-            const fetchResults = async () => {
-                try {
-                    console.log("Fetching results for:", searchTerm); // Log the search term
-                    const response = await axios.get(`http://localhost:5000/api/portfolio-types/search?query=${searchTerm}`);
-                    console.log("Search results:", response.data); // Log the results
-                    setSearchResults(response.data);
-                } catch (error) {
-                    console.error("Error fetching search results", error);
-                }
-            };
+export default function ProfessionalComponent({ step, setStep, professionalName, setProfessionalName, onSubmit }) {
+    // Define the validation schema using Yup
+    const validationSchema = Yup.object({
+        professionalName: Yup.string()
+            .required('Professional name is required')
+            .min(2, 'Professional name must be at least 2 characters long'),
+    });
 
-            fetchResults();
-        } else {
-            setSearchResults([]);
-        }
-    }, [searchTerm]);
-
-    const handleSelect = (result) => {
-        setSelectedResult(result); // Store the selected result
-        setSearchResults([]); // Clear the search results after selection
-        setSearchTerm(result.name); // Optionally, update the search term to the selected result
-    };
-
-    const clearSelection = () => {
-        setSelectedResult(null);
-        setSearchTerm('');
-        setSearchResults([]);
-    };
+    // Initialize Formik with initial values, validation schema, and onSubmit handler
+    const formik = useFormik({
+        initialValues: {
+            professionalName: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log('Submitting Form with Professional Name:', values.professionalName);
+            setProfessionalName(values.professionalName);
+            onSubmit(values.professionalName);  // Pass the name directly to the onSubmit handler
+        },
+    });
 
 
     return (
         <div className='w-full flex items-center'>
             <div className='w-full'>
                 <div className='flex items-center justify-between'>
-                    {
-                        selectedResult === null ? (
-                            <div className='w-full'>
-                                <form className='w-full flex items-center justify-between' onSubmit={(e) => e.preventDefault()}>
-                                    <div className={`rounded-md flex items-center ${isFocused ? 'border-primary border-2' : 'border-gray-400  border'} py-2 px-2 w-[80%]`}>
-                                        <CiSearch className={`text-xl mr-3 ${isFocused ? 'text-primary' : 'text-gray-400'}`} />
+                    <div className='w-full'>
+                        <form className='w-full' onSubmit={formik.handleSubmit}> {/* Ensure handleSubmit is used here */}
+                            <div className='w-full flex items-center justify-between'>
+                                <div className='w-full'>
+                                    <div className={`rounded-md flex items-center ${formik.touched.professionalName && formik.errors.professionalName ? 'border-red-500 border-2' : 'border-gray-400  border'} py-2 px-2 w-[80%]`}>
                                         <input
                                             id='professionalName'
                                             name='professionalName'
-                                            value={proffesionalName}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            onBlur={() => setIsFocused(false)}
-                                            onFocus={() => setIsFocused(true)}
+                                            value={formik.values.professionalName}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
                                             type="text"
-                                            placeholder='Search Item'
+                                            placeholder='Enter Your Professional Name'
                                             className='w-full outline-none'
                                         />
                                     </div>
-                                </form>
-                                {
-                                    searchResults.length > 0 && (
-                                        <ul className='border border-gray-400 rounded-md mt-2 w-[80%] bg-white'>
-                                            {searchResults.map((result) => (
-                                                <li
-                                                    key={result._id}
-                                                    onClick={() => handleSelect(result)}
-                                                    className='px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer'
-                                                >
-                                                    {result.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )
-                                }
+                                    {formik.touched.professionalName && formik.errors.professionalName ? (
+                                        <div className="text-red-500 text-sm mt-1">
+                                            {formik.errors.professionalName}
+                                        </div>
+                                    ) : null}
+                                </div>
                             </div>
-                        ) : (
-                            <div className='w-full'>
-                                <div
-                                    key={selectedResult._id}
-                                    className='flex justify-between items-center gap-x-3'
+                            <div className='my-8'>
+                                <button
+                                    type="submit"  // Ensure the button is of type "submit" to trigger Formik's handleSubmit
+                                    className={`bg-primary rounded-full text-white text-sm px-8 py-2 ${!formik.isValid || !formik.dirty ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
+                                    disabled={!formik.isValid || !formik.dirty} // Disable if the form is not valid or not dirty
                                 >
-                                    <div className='w-[80%] flex items-center gap-x-3'>
-                                        <div className='w-3 h-3 rounded-full bg-primary'></div>
-                                        <h1 className='font-semibold'> {selectedResult.name} </h1>
-                                    </div>
-                                    <div className='cursor-pointer w-[18%] flex justify-end'>
-                                        <IoClose onClick={clearSelection} className='font-semibold hover:text-primary' />
-                                    </div>
-                                </div>
-                                <div className='my-12'>
-                                    <button onClick={() => setStep(2)} className='bg-primary rounded-full text-white text-sm px-3 py-2'>
-                                        Continue
-                                    </button>
-                                </div>
+                                    Finish
+                                </button>
                             </div>
-                        )
-                    }
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }

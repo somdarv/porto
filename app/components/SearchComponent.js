@@ -3,11 +3,10 @@ import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { IoClose } from "react-icons/io5";
 
-export default function SearchComponent({ step, setStep }) {
+export default function SearchComponent({ step, setStep, onSelect, selectedResult, setSelectedResult, }) {
     const [searchResults, setSearchResults] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedResult, setSelectedResult] = useState(null);
 
     useEffect(() => {
         if (searchTerm.length > 0) {
@@ -29,6 +28,7 @@ export default function SearchComponent({ step, setStep }) {
     }, [searchTerm]);
 
     const handleSelect = (result) => {
+        onSelect(result);  // Pass the selected portfolio type to the parent
         setSelectedResult(result); // Store the selected result
         setSearchResults([]); // Clear the search results after selection
         setSearchTerm(result.name); // Optionally, update the search term to the selected result
@@ -95,7 +95,7 @@ export default function SearchComponent({ step, setStep }) {
                                     </div>
                                 </div>
                                 <div className='my-12'>
-                                    <button onClick={() => setStep(2)} className='bg-primary rounded-full text-white text-sm px-3 py-2'>
+                                    <button onClick={() => { setStep(2); console.log(selectedResult.name) }} className='bg-primary rounded-full text-white text-sm px-3 py-2'>
                                         Continue
                                     </button>
                                 </div>
