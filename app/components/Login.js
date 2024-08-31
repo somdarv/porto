@@ -44,12 +44,14 @@ export default function Login() {
                 localStorage.setItem('authToken', response.data.token);
                 console.log('Login successful! Token:', response.data.token); // Fixed token variable reference
 
-                if (response.data.needsOnboarding) {
-                    router.push('/onboarding');
+                // Redirect based on onboarding status
+                if (response.data.onboardingComplete) {
+                    router.push('/dashboard');
                 } else {
-                    // router.push('/dashboard');
-                    console.log('Login successful! Token:', response.data.token); // Fixed token variable reference
+                    router.push('/onboarding');
                 }
+
+
             } catch (error) {
                 console.error('Error during login:', error); // Added log
                 if (error.response && error.response.data.msg) {
