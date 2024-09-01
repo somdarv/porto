@@ -1,7 +1,9 @@
 'use client'
 
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+
 
 
 
@@ -11,9 +13,10 @@ export default function Navigation({ page }) {
 
   return (
     <div className="w-[80%] justify-between flex items-center mx-auto py-4">
-      <div>
-        <Link href={'/#'}>
-          <button className="font-semibold text-white text-2xl">PORTO</button>
+      <div className="flex items-center">
+        <Link className="flex items-center  gap-x-2" href={'/#'}>
+          <Image alt="logo" src={'/faviconwhite.png'} width={35} height={35} />
+          <button className="font-bold text-white text-2xl">Porto</button>
         </Link>
       </div>
 
@@ -77,7 +80,7 @@ export default function Navigation({ page }) {
 
               <div>
                 <Link href={'/register'}>
-                  <button className="bg-white px-3 py-2 rounded-full text-sm font-semibold">
+                  <button className="bg-white px-3 py-2 rounded-full text-sm text-primary font-semibold">
                     Get Started
                   </button>
                 </Link>

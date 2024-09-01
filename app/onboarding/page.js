@@ -5,6 +5,9 @@ import Link from 'next/link';
 import SearchComponent from '../components/SearchComponent';
 import ProfessionalComponent from '../components/ProfessionalName';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
 
 
 
@@ -12,6 +15,7 @@ export default function Page() {
     const [step, setStep] = useState(1);
     const [portfolioType, setPortfolioType] = useState(null);
     const [professionalName, setProfessionalName] = useState('');
+    const router = useRouter();
 
     const handlePortfolioTypeSelect = (selectedResult) => {
         setPortfolioType(selectedResult);
@@ -36,13 +40,26 @@ export default function Page() {
                 }
             });
 
+
             if (response.status === 200) {
                 console.log('Onboarding completed:', response.data);
                 // Redirect to dashboard or next step
+                router.push('/dashboard');
             }
         } catch (error) {
             console.error('Error during onboarding:', error);
         }
+    };
+
+    const handleLogout = () => {
+        // Clear authentication token from localStorage
+        localStorage.removeItem('authToken');
+
+        // Optional: Clear other user-related data
+        localStorage.removeItem('userData');
+
+        // Redirect the user to the login page or homepage
+        router.push('/login');
     };
 
 
@@ -50,11 +67,25 @@ export default function Page() {
 
     return (
         <div className="whitebg h-screen flex flex-col justify-between">
-            <div className='w-[80%] py-4 mx-auto'>
+            <div className='w-[80%] flex items-center justify-between py-4 mx-auto'>
                 <div>
                     <Link href={'/#'}>
-                        <button className=" text-primary font-bold  text-2xl">PORTO</button>
+                        <button className=" text-primary font-bold flex items-center gap-x-2 text-2xl">
+                            <Image
+                                src={'/favicon.png'}
+                                width={40}
+                                height={40}
+                                alt='porto-logo'
+                            />
+                            Porto
+                        </button>
                     </Link>
+                </div>
+
+                <div className='flex items-center gap-x-2 '>
+                    <button onClick={handleLogout} className='px-6 py-3 border-2 border-primary rounded-full text-primary font-semibold text-sm'>
+                        Log Out
+                    </button>
                 </div>
             </div>
 
