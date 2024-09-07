@@ -42,6 +42,8 @@ export default function Login() {
 
                 // The response contains the `token` and `needsOnboarding` flag
                 localStorage.setItem('authToken', response.data.token);
+
+
                 console.log('Login successful! Token:', response.data.token); // Fixed token variable reference
 
                 // Redirect based on onboarding status
