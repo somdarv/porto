@@ -5,16 +5,15 @@ import { CiLocationOn } from 'react-icons/ci';
 import { FaFacebook } from "react-icons/fa";
 import { TiSocialInstagramCircular } from "react-icons/ti";
 import { AiFillTwitterCircle } from "react-icons/ai";
-import { SiteContext } from '../contexts/SiteContext';
 import Image from 'next/image';
-import { UserContext } from '../contexts/UserContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import ModalAddItem from '../components/ModalAddItem';
 import { useParams, useRouter } from 'next/navigation';
-
-
+import { SiteContext } from '@/app/contexts/SiteContext';
+import { UserContext } from '@/app/contexts/UserContext';
+import ModalAddItem from '@/app/components/ModalAddItem';
+import ModalAddWork from '@/app/components/ModalAddWork';
 
 
 
@@ -250,12 +249,7 @@ export default function Page() {
                             <p className='text-sm'>{portfolioName}</p>
                         </div>
 
-                        <div className=''>
-                            <button
-                                className='absolute  buttom-0 text-white rounded-full text-xs px-6 py-2  bg-primary'>
-                                Edit
-                            </button>
-                        </div>
+
                     </div>
 
                     <div className='flex my-2 gap-x-2 items-center '>
@@ -283,11 +277,11 @@ export default function Page() {
                     <p className='px-6 py-2 flex text-sm items-center justify-center rounded-md text-white w- font-semibold bg-primary'>Work</p>
                 </div>
 
-                <div className='rounded-md flex  '>
+                {/* <div className='rounded-md flex  '>
                     <button onClick={handleModalClick} className='text-sm '>
                         + Add Item
                     </button>
-                </div>
+                </div> */}
             </div>
 
 
@@ -312,12 +306,12 @@ export default function Page() {
 
             </div>
 
-            <div className='w-[70%] mx-auto flex justify-end'>
+            {/* <div className='w-[70%] mx-auto flex justify-end'>
                 <button onClick={formik.handleSubmit}
                     className='absolute  buttom-0 text-white rounded-full text-sm px-6 py-3  bg-primary'>
                     Save Changes
                 </button>
-            </div>
+            </div> */}
             {/* Expertise Modal */}
             {modal && <ModalAddItem />}
 

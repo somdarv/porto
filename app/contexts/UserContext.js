@@ -35,8 +35,14 @@ export const UserProvider = ({ children }) => {
         }
     }, []); // Only run once on component mount
 
+
+    // Function to handle token storage and data fetch on page load
+    useEffect(() => {
+
+        fetchUserData()
+    }, []);
     // Function to fetch user data using the token
-    const fetchUserData = async (token) => {
+    const fetchUserData = async (savedToken) => {
         try {
             const res = await axios.get('http://localhost:5000/api/users/userdata', {
                 headers: {

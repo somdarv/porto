@@ -159,6 +159,39 @@ export const SiteProvider = ({ children }) => {
             setLoading(false);
         }
     };
+
+
+    const addWorkToExpertise = async (expertiseId, workData) => {
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append('workTitle', workData.workTitle);
+            formData.append('workDescription', workData.workDescription);
+            formData.append('workLink', workData.workLink);
+            if (workData.workFile) {
+                formData.append('workFile', workData.workFile);
+            }
+
+            const response = await axios.post(`http://localhost:5000/api/site/add-work-to-expertise/${expertiseId}`, formData, {
+                headers: {
+                    'x-auth-token': token, // Ensure token is sent
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            // Fetch updated site information
+            await fetchSiteInfo();
+            console.log('Work added successfully');
+        } catch (err) {
+            console.error('Error adding work:', err.response?.data?.message || 'Server error');
+            setError(err.response?.data?.message || 'Server error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
     // Clear errors
     const clearError = () => setError(null);
 
@@ -179,7 +212,8 @@ export const SiteProvider = ({ children }) => {
                 setModal,
                 handleModalClick,
                 getCountryName,
-                addExpertise
+                addExpertise,
+                addWorkToExpertise
                 ,
             }}
         >

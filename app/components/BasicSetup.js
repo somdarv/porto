@@ -66,9 +66,11 @@ export default function BasicSetup() {
 
 
                                     <div className='border-b flex my-1 cursor-pointer hover:text-primary items-center gap-x-2 py-4 w-[100%] mx-auto'>
-
                                         <CgCheck className='text-lg text-gray-500' />
-                                        <h1 className='text-sm'>Launch Your Site</h1>
+                                        <h1 className='text-sm' onClick={() => {
+                                            // Navigate to the live view page (replace 'subdomain' with the actual subdomain/user info)
+                                            router.push(`/live/${userData.userName}`);  // Example: use the user ID or subdomain
+                                        }}>Launch Your Site</h1>
                                     </div>
 
                                 </div>
