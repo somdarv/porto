@@ -10,6 +10,7 @@ import GiveSiteName from './Biography';
 import BasicSetup from './BasicSetup';
 import Biography from './Biography';
 import GeneralSettings from './GeneralSettings';
+import BuildingTemplate from './BuildingTemplate';
 
 
 
@@ -72,6 +73,8 @@ export default function Dashboard() {
                                 return <GeneralSettings />;
                             case 'guide':
                                 return <BasicSetup />
+                            case 'setup':
+                                return <BuildingTemplate />
                             default:
                                 return ''
 

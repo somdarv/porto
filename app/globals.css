@@ -26,6 +26,12 @@
 
 }
 
+.catImage {
+  background-image: url('/14513.jpg');
+  object-fit: contain;
+
+}
+
 .whitebg {
   position: relative;
   z-index: 1; /* Ensure this is above the pseudo-element */

@@ -10,74 +10,95 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [newUserAction, setNewUserAction] = useState('guide');
     const [chosenTemplate, setChosenTemplate] = useState(null);
-    const [iscompleteTemplateSetjup, setIsCompleteTemplateSetup] = useState(false);
+    const [isCompleteTemplateSetup, setIsCompleteTemplateSetup] = useState(false);
+    const savedUserData = localStorage.getItem('userData');
+    const savedToken = localStorage.getItem('authToken');
+    // console.log('savedToken is:', savedToken) // Check token from localStorage
+    // console.log('savedData is:', savedUserData) // Check token from localStorage
 
+    // Function to handle token storage and data fetch on page load
     useEffect(() => {
-        // Check localStorage for userData on initial load
-        const savedUserData = localStorage.getItem('userData');
-        if (savedUserData) {
-            setUserData(JSON.parse(savedUserData)); // Set userData from localStorage if available
+        // const savedUserData = localStorage.getItem('userData');
+        // const savedToken = localStorage.getItem('authToken');
+        // console.log('savedToken is:', savedToken) // Check token from localStorage
+
+        if (savedUserData && savedToken) {
+            // User data already exists in localStorage, no need to fetch again
+            setUserData(JSON.parse(savedUserData));
+            setLoading(false);
+        } else if (savedToken) {
+            // If only the token is present, fetch the user data
+            fetchUserData(savedToken);
         } else {
-            // Fetch user data if no saved data is found in localStorage
-            const fetchUserData = async () => {
-                const token = localStorage.getItem('authToken'); // Get token from localStorage
-                if (token) {
-                    try {
-                        const res = await axios.get('http://localhost:5000/api/users/userdata', {
-                            headers: {
-                                'x-auth-token': token, // Send token in headers for authentication
-                            },
-                        });
-
-                        // Update userData with fetched data
-                        const fetchedData = res.data;
-                        setUserData(fetchedData);
-                        localStorage.setItem('userData', JSON.stringify(fetchedData)); // Store fetched user data in localStorage
-
-                        // Set chosen template if available
-                        if (fetchedData.chosenTemplate) {
-                            setChosenTemplate(fetchedData.chosenTemplate);
-                        }
-
-                        // Set completeTemplateSetup status
-                        if (fetchedData.templateComplete) {
-                            setCompleteTemplateSetup(true);
-                        }
-
-                    } catch (err) {
-                        console.error('Error fetching user data:', err);
-
-                        // If the token is invalid or an error occurs, clear it and log the user out
-                        localStorage.removeItem('authToken');
-                    } finally {
-                        setLoading(false); // Set loading to false after the request completes
-                    }
-                } else {
-                    console.error('No token found');
-                    setLoading(false); // Set loading to false if no token is found
-                }
-            };
-
-            fetchUserData();
+            console.error('No token found');
+            setLoading(false);
         }
+    }, []); // Only run once on component mount
 
+    // Function to fetch user data using the token
+    const fetchUserData = async (token) => {
+        try {
+            const res = await axios.get('http://localhost:5000/api/users/userdata', {
+                headers: {
+                    'x-auth-token': savedToken,
+                },
+            });
 
-    }, []); // This effect runs on component mount to check for the auth token
+            // Update userData with fetched data
+            const fetchedData = res.data;
+            setUserData(fetchedData);
+            localStorage.setItem('userData', JSON.stringify(fetchedData)); // Store in localStorage
 
+            // Set chosen template if available
+            if (fetchedData.chosenTemplate) {
+                setChosenTemplate(fetchedData.chosenTemplate);
+            }
 
+            // Set completeTemplateSetup status
+            if (fetchedData.templateComplete) {
+                setIsCompleteTemplateSetup(true);
+            }
 
+        } catch (err) {
+            console.error('Error fetching user data:', err);
+            localStorage.removeItem('authToken'); // If there's an error, clear the token
+        } finally {
+            setLoading(false); // Set loading to false after request completes
+        }
+    };
 
-    // Function to fetch live data from the backend
+    // Function to logout and clear the token
+    const logoutUser = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        setUserData(null); // Clear userData state
+        setChosenTemplate(null);
+        setIsCompleteTemplateSetup(false);
+        console.log('User logged out, token and data cleared');
+    };
+
+    // Fetch only live data and merge it with userData
     const fetchLiveData = async () => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
+        if (savedToken) {
             try {
                 const res = await axios.get('http://localhost:5000/api/users/live-data', {
                     headers: {
-                        'x-auth-token': token,
+                        'x-auth-token': savedToken,
                     },
                 });
-                setUserData(res.data);  // Update userData state with live data
+
+                const liveData = res.data;
+
+                // Merge live data with existing userData without overwriting everything
+                setUserData((prevUserData) => ({
+                    ...prevUserData,
+                    ...liveData,
+                }));
+
+                // Fetch templateComplete status if available and set it
+                if (liveData.templateComplete !== undefined) {
+                    setIsCompleteTemplateSetup(liveData.templateComplete);
+                }
             } catch (err) {
                 console.error('Error fetching live data:', err);
             }
@@ -87,28 +108,24 @@ export const UserProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        // Initial fetch of the data
-        fetchLiveData();
-
-        // Set up polling to fetch live data every 10 seconds
+        // Poll live data every 10 seconds
         const intervalId = setInterval(() => {
             fetchLiveData();
-        }, 500);  // Adjust interval as needed
+        }, 1000); // Adjust polling time as needed
 
-        // Cleanup the interval on component unmount
-        return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId); // Cleanup on component unmount
     }, []);
 
     const updateChosenTemplate = async (chosenTemplateValue) => {
-        const token = localStorage.getItem('authToken');  // Get token from localStorage
+        // const token = localStorage.getItem('authToken');
 
         try {
             const res = await axios.put(
                 'http://localhost:5000/api/users/chosen-template',
-                { chosenTemplate: chosenTemplateValue },  // Send the new template choice
+                { chosenTemplate: chosenTemplateValue },
                 {
                     headers: {
-                        'x-auth-token': token,  // Send token in headers for authentication
+                        'x-auth-token': savedToken,
                     },
                 }
             );
@@ -117,30 +134,28 @@ export const UserProvider = ({ children }) => {
             setChosenTemplate(chosenTemplateValue);
             console.log('Template updated successfully:', res.data);
 
-            // Mark template setup as complete
             completeTemplateSetup();
         } catch (err) {
             console.error('Error updating chosen template:', err);
         }
 
-        setNewUserAction('guide'); // Navigate to guide action
+        setNewUserAction('guide');
     };
 
     const completeTemplateSetup = async () => {
-        const token = localStorage.getItem('authToken');  // Get token from localStorage
+        // const token = localStorage.getItem('authToken');
 
         try {
             const res = await axios.put(
-                'http://localhost:5000/api/users/template-complete',  // Endpoint for completing template setup
+                'http://localhost:5000/api/users/template-complete',
                 {},
                 {
                     headers: {
-                        'x-auth-token': token,  // Send token in headers for authentication
+                        'x-auth-token': savedToken,
                     },
                 }
             );
 
-            // Mark template setup as complete
             setIsCompleteTemplateSetup(true);
             console.log('Template setup marked as complete:', res.data);
         } catch (err) {
@@ -157,7 +172,9 @@ export const UserProvider = ({ children }) => {
             newUserAction,
             setNewUserAction,
             chosenTemplate,
-            setChosenTemplate
+            isCompleteTemplateSetup, setIsCompleteTemplateSetup,
+            setChosenTemplate,
+            logoutUser,
         }}>
             {children}
         </UserContext.Provider>

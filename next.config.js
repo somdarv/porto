@@ -10,6 +10,10 @@ module.exports = {
 
     async redirects() {
         return [];
-    }
+    },
+
+    images: {
+        domains: ['localhost'], // Add 'localhost' or any other required domain here
+    },
 
 };

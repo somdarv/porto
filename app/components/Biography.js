@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaSpinner } from 'react-icons/fa';
 import { SiteContext, SiteProvider } from '../contexts/SiteContext';
+import Image from 'next/image';
 
 
 
@@ -159,10 +160,12 @@ export default function Biography() {
                                 <div className="w-32 h-32 flex items-center rounded-full justify-center bg-gray-100 mx-auto">
                                     <label htmlFor="file-upload" className="cursor-pointer w-full h-full flex justify-center items-center">
                                         {imagePreview ? (
-                                            <img
+                                            <Image
                                                 src={imagePreview}
                                                 alt="Uploaded Preview"
                                                 className="w-full h-full object-cover"
+                                                width={200}
+                                                height={200}
                                             />
                                         ) : (
                                             <span className="text-gray-400 text-xs text-center">Click to upload</span>
