@@ -23,8 +23,8 @@ export default function page() {
           Setting up your own portfolio website is a fantastic way to express
           who you are as a creative, and to share your talents with the world.
         </p>
-        <div className="flex justify-center">
-          <button className="bg-white px-6 my-2 py-4 hover:text-white hover:bg-[#082431] rounded-full font-semibold text--sm ">
+        <div className="flex my-6 justify-center">
+          <button className="bg-white px-6 my-2 py-4 hover:text-white hover:bg-primary rounded-full font-semibold text--sm ">
             Create Yours Now
           </button>
         </div>

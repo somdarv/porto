@@ -1,4 +1,19 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+module.exports = {
+    async rewrites() {
+        return [
+            {
+                source: '/:subdomain',
+                destination: '/[subdomain]',
+            },
+        ];
+    },
 
-module.exports = nextConfig
+    async redirects() {
+        return [];
+    },
+
+    images: {
+        domains: ['localhost'], // Add 'localhost' or any other required domain here
+    },
+
+};
